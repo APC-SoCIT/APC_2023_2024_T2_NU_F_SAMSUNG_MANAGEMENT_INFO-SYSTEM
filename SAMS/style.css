@@ -1,0 +1,260 @@
+/*FONTS*/
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+
+html,body{
+    background: #6665ee;
+    font-family: 'Poppins', sans-serif;
+}
+::selection{
+    color: #fff;
+    background: #6665ee;
+}
+.container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.container .form{
+    background: #fff;
+    padding: 30px 35px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+
+/* LOGIN ALIGNMENT*/
+.container .form form .form-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+/************************************************************/
+
+
+
+/*LOGIN FORM FIELD*/
+.container .form form .form-group .form-control {
+    height: 35px;
+    font-size: 13px;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 10px;
+    padding-left: 50px;
+}
+/************************************************************/
+
+
+
+/* LOGIN ICON CIRCLE */
+.container .form form .form-group .circle {
+    position: absolute;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    color: #0d26a7;
+    top: -2px;
+}
+/************************************************************/
+
+
+
+/*FORGOT PASSWORD TEXT*/
+.container .forget-pass{
+    margin: -15px 0 15px 0;
+    margin-left: 10px;
+}
+.container .forget-pass a{
+   font-size: 13px;
+}
+.container .forget-pass a {
+    color: rgba(0, 0, 0, 0.7);
+}
+.container .forget-pass a:hover{
+    color: #0d26a7;
+}
+/************************************************************/
+
+
+
+
+/*LOGIN BUTTON*/
+.container .button {
+    width: 90px;
+    background: #0d26a7;
+    border-radius: 13px;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 3px;
+    transition: all 0.3s ease;
+    display: block; /* Add this line */
+    margin: 0 auto; /* Add this line */
+    text-align: center; /* Add this line */
+}
+.container .button:hover{
+    background: #1f3cd2;
+}
+/************************************************************/
+
+
+
+/*WELCOME BACK! TEXT*/
+.container .form form .link{
+    padding: 5px 0;
+}
+.container .login-form form p{
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 50px;
+}
+/************************************************************/
+
+
+
+/*ERROR MESSAGE*/
+.container .row .alert{
+    font-size: 14px;
+}
+/************************************************************/
+
+
+
+/*SAMSUNG LOGO*/
+.container .form form .logo{
+    width: 100px; 
+    height: 10; 
+    display: block; 
+    margin: 0 auto; 
+    margin: 15px auto;
+}
+/************************************************************/
+
+
+
+/*EYE ICON*/
+.container .form form .form-group .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+    color: #1d1b1b; /* Change color as needed */
+}
+/************************************************************/
+
+
+
+/*KEEP ME LOGIN*/
+/* Style for the checkbox */
+.form-check-input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    outline: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.7); /* Border color */
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
+}
+
+
+/*Custom checkmark (dot)*/
+.form-check-input[type="checkbox"]::before {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.form-check-input[type="checkbox"]:checked {
+    background-color: #0d26a7;
+    border: 2px solid #0d26a7;
+}
+.form-check-input[type="checkbox"]:checked::before {
+    opacity: 1;
+}
+
+
+/*text "keep me logged in"*/
+.form-check-label {
+    display: inline-block;
+    vertical-align: middle;
+    color: rgba(0, 0, 0, 0.7);
+    font-size:13px;  
+    margin-left: 25px; 
+    margin-right: 10px;
+}
+
+
+/*Custom checkmark
+.form-check-input[type="checkbox"]:checked::before {
+    content: '✓'; 
+    font-size:10px;
+    color: #0d26a7; 
+    font-weight: bold;
+}*/
+/********************************************************************/
+
+
+
+/* FOOTER*/
+.footer {
+    margin-top: 50px; /* Adjust the margin as needed */
+    padding: 10px 0;
+    margin-bottom: -30px;
+    text-align: center;
+    font-size: 10px;
+    font-weight:200;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+.footer ul li:last-child {
+    margin-right: 0;
+}
+
+.footer ul li a {
+    text-decoration: none;
+    color: #333; /* Change the color as needed */
+}
+
+.footer p {
+    margin-top: 10px;
+    font-size: 10px;
+    font-weight: bold;
+}
+/********************************************************************/
+

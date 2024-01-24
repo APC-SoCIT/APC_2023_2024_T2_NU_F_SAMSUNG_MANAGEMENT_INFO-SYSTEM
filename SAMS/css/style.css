@@ -1,0 +1,779 @@
+/* Scroll bar */
+::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 5px !important;
+}
+  
+  /* Track */
+::-webkit-scrollbar-track {
+    background: #d8d8d8;
+}
+  
+  /* Handle */
+::-webkit-scrollbar-thumb {
+    background-color:rgb(65, 52, 252);;
+    border-radius:5px;
+    height:40px;
+}
+  
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color:rgb(21, 16, 91);
+}
+
+.nav-bar{
+    background-color:rgb(40, 31, 172);
+    padding:20px;
+    color:white;
+}
+
+.sidebar{
+    background-color:rgb(238, 238, 238);
+    position:fixed;
+    width:250px;
+    height:100%;
+}
+
+.sidebar a{
+    text-decoration: none;
+    color:black;
+}
+
+.sidebar .sidebar-item{
+    background-color:white;
+    color:black;
+    padding:15px;
+    text-align:center;
+    margin:5px;
+    cursor:pointer;
+    display:block;
+    transition:0.15s ease-in-out;
+}
+
+.sidebar .sidebar-item:hover{
+    background-color:rgb(193, 193, 193);
+}
+
+.main-content{
+    text-align:center;
+    position:absolute;
+    left:250px;
+    right:0;
+    bottom:0;
+    top:64px;
+    padding:30px;
+}
+
+.error-txt{
+    color:red;
+    font-size:20px;
+}
+
+.caution{
+    color:red;
+}
+
+.good-txt{
+    color:green;
+    font-size:20px;
+    background-color:white;
+}
+
+button{
+    border:0;
+    background-color:rgb(40, 31, 172);
+    color:white;
+    padding:3px;
+    min-width:70px;
+    transition:0.1s ease-in-out;
+}
+
+button > *{
+    pointer-events:none;
+}
+
+button:hover{
+    background-color:rgb(21, 12, 140);
+}
+
+button[id*="button-cell"]{
+    border:0;
+    font-size:18px;
+    background-color:rgb(40, 31, 172);
+    color:white;
+    padding:8px;
+    transition:0.1s ease-in-out;
+}
+
+a[id*="button-cell"]{
+    border:0;
+    font-size:18px;
+    background-color:rgb(40, 31, 172);
+    color:white;
+    padding:8px;
+    transition:0.1s ease-in-out;
+}
+
+#button-cell:hover{
+    background-color:rgb(21, 12, 140);
+}
+
+/* Forms */
+
+form{
+    background-color:white;
+    padding:30px;
+    position:absolute;
+    text-align: left;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+}
+
+form label{
+    font-size:28px;
+    font-weight: 600;
+    color:rgb(40, 31, 172);
+}
+
+form input[type=text],
+form input[type=date]{
+    font-size: 16px;
+    height:30px;
+    margin-bottom:20px;
+    border:1px solid black;
+    width:100%;
+}
+
+form select{
+    width:100%;
+    color:gray;
+    font-size:16px;
+    height:30px;
+    border:1px solid black;
+    margin-bottom:20px;
+}
+
+form input[type=button],
+form input[type=submit]{
+    border:0;
+    background-color:rgb(40, 31, 172);
+    margin-top:25px;
+    color:white;
+    padding:3px;
+    width:70px;
+    transition:0.1s ease-in-out;
+    align-items: right;
+}
+
+form input[type=button]:hover,
+form input[type=submit]:hover{
+    background-color:rgb(21, 12, 140);
+}
+
+form.report_form{
+    background-color:red;
+    position:relative;
+    transform:translate(0%, 0%);
+    left:0;
+    top:20px;
+    padding:0;
+    width:150px;
+    margin-left: auto;
+}
+
+form.report_form input[type=submit]{
+    width:150px;
+    margin:0;
+    background-color:green;
+    transition:0.1s ease-in-out;
+}
+
+form.report_form input[type=submit]:hover{
+    background-color:rgb(0, 100, 0);
+}
+
+form.edit_rowform {
+    display: flex;
+    flex-direction: column;
+    width:30%;
+}
+
+form.edit_rowform .flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+form.edit_rowform .flex-row .row-item{
+    display:flex;
+    flex-direction:column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width:48%;
+}
+
+form.add-employeeform{
+    display:flex;
+    flex-direction: column;
+    width:30%
+}
+
+form.add-deptform{
+    width:30%;
+}
+
+.report-container{
+    background-color:none;
+    position:flex;
+    align-items:right;
+}
+
+/* GUI overlays */
+
+.overlay{
+    background-color:rgb(0, 0, 0, 0.5);
+    z-index:10;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width:100%;
+    height:100%;
+}
+
+.add-employeeGUI.overlay{
+    display:none;
+}
+
+.add-assetGUI.overlay{
+    display:none;
+}
+
+.assign-assetGUI form{
+    max-height:600px;
+}
+
+.assign-assetGUI form .emp-table-container{
+    max-height:293px;
+    margin-top:0;
+}
+
+.assign-assetGUI.overlay{
+    display:none;
+}
+
+.edit-rowGUI.overlay{
+    display:none;
+}
+
+.edit-rowGUI form input[type=text],
+.edit-rowGUI form select,
+.edit-rowGUI form input[type=date]{
+    width:100%;
+    margin-bottom:15px;
+    margin-top:0;
+}
+
+.edit-rowGUI form label.header{
+    font-size:30px;
+}
+
+.edit-rowGUI form label{
+    font-size:15px;
+}
+
+.import-employeeGUI{
+    display:none;
+}
+
+.import-employeeGUI form{
+    position:relative;
+    display:flex;
+    width:100%;
+    transform:translate(0%, 0%);
+    top:0;
+    left:0;
+    border:2px blue dashed;
+    padding:10px;
+    text-align:center;
+    align-items:center;
+    justify-content:center;
+}
+
+#emp_import_button{
+    margin-top:0 !important;
+}
+
+.import-assetGUI{
+    display:none;
+}
+
+.import-assetGUI form{
+    position:relative;
+    display:flex;
+    width:100%;
+    transform:translate(0%, 0%);
+    top:0;
+    left:0;
+    border:2px blue dashed;
+    padding:10px;
+    text-align:center;
+    align-items:center;
+    justify-content:center;
+}
+
+#asset_import_button{
+    margin-top:0 !important;
+}
+
+.select-dept_ccenterGUI{
+    display:none;
+}
+
+.select-form{
+    background-color:white;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:50%;
+    padding:30px;
+}
+
+.select-form button{
+    width:100%;
+    height:50px;
+    margin:5px;
+}
+
+.select-form button#cancel_select_dept{
+    width:100px;
+    float:right;
+    height:30px;
+}
+
+.add-departmentGUI{
+    display:none;
+}
+
+.add-ccenterGUI{
+    display:none;
+}
+
+.edit-deptGUI{
+    display:none;
+}
+
+.edit-ccenterGUI{
+    display:none;
+}
+
+.delete-deptGUI{
+    display:none;
+}
+
+.delete-ccenterGUI{
+    display:none;
+}
+
+.dispose-rowGUI{
+    display:none;
+}
+
+/* department php*/
+
+.dept-search-bar{
+    width:300px;
+}
+
+.dept-table-container{
+    background-color:rgb(218, 218, 218);
+    max-height:567px;
+    overflow-y:auto;
+    width:900px;
+    margin-top:30px !important;
+    margin:auto;
+}
+
+.dept-table{
+    width:100%;
+}
+
+.dept-table td{
+    border:1px solid black;
+    padding:8px;
+    font-size:13px;
+}
+
+.dept-table th{
+    border:1px solid rgb(25, 18, 112);
+    position:sticky;
+    top:0;
+    padding:5px;
+    font-size:14px;
+}
+
+.dept-table tr.tbl-header{
+    background-color:rgb(40, 31, 172);
+    position:sticky;
+    top:0;
+    color:white;
+}
+
+.dept-table tr.tbl-header th:last-child{
+    background-color:white;
+    border:1px solid white;
+}
+
+.dept-table #depttr:nth-child(odd){
+    background-color:white;
+}
+
+.dept-table #depttr:nth-child(even){
+    background-color:rgb(152, 202, 255);
+}
+
+.dept-table #depttr td:last-child {
+    background-color: white;
+    border:1px solid white;
+    text-align: left;
+}
+
+/* employee php */
+
+.emp-search-bar{
+    width:300px;
+}
+
+.emp-table-container{
+    background-color:rgb(218, 218, 218);
+    max-height:567px;
+    overflow-y:auto;
+    width:900px;
+    margin-top:30px !important;
+    margin:auto;
+}
+
+.emp-table{
+    width:100%;
+}
+
+.emp-table td{
+    border:1px solid black;
+    padding:8px;
+    font-size:13px;
+}
+
+.emp-table th{
+    border:1px solid rgb(25, 18, 112);
+    position:sticky;
+    top:0;
+    padding:5px;
+    font-size:14px;
+}
+
+.emp-table tr.tbl-header{
+    background-color:rgb(40, 31, 172);
+    position:sticky;
+    top:0;
+    color:white;
+}
+
+.emp-table tr.tbl-header th:first-child{
+    background-color:white;
+    border:1px solid white;
+    border-right: 1px solid rgb(25, 18, 112) !important;
+}
+
+.emp-table #employeetr td:first-child {
+    background-color: white;
+    border:1px solid white;
+    border-right: 1px solid black !important;
+    text-align: left;
+}
+
+.emp-table #employeetr td:nth-child(2),
+.emp-table tr.tbl-header th:nth-child(2){
+    display:none;
+}
+
+.emp-table tr.tbl-header th:last-child{
+    background-color:white;
+    border:1px solid white;
+}
+
+.emp-table #employeetr:nth-child(odd){
+    background-color:white;
+}
+
+.emp-table #employeetr:nth-child(even){
+    background-color:rgb(152, 202, 255);
+}
+
+.emp-table #employeetr td:last-child {
+    background-color: white;
+    border:1px solid white;
+    text-align: left;
+}
+
+/* asset php */
+
+.asset-search-bar{
+    width:300px;
+}
+
+.asset-table-container{
+    background-color:rgb(218, 218, 218);
+    max-height:537px;
+    width:1300px;
+    overflow-y:auto;
+    margin-top:30px !important;
+    margin:auto;
+}
+
+.asset-table{
+    width:100%;
+    border:1px solid black;
+}
+
+.asset-table td{
+    border:1px solid black;
+    border-left: 1px solid black;
+    padding:5px;
+    font-size:12px;
+}
+
+.asset-table th{
+    border:1px solid rgb(25, 18, 112);
+    position:sticky;
+    top:0;
+    height:50px;
+    padding:7px;
+}
+
+.asset-table tr.tbl-header{
+    background-color:rgb(40, 31, 172);
+    position:sticky;
+    top:0;
+    color:white;
+}
+
+.asset-table tr.tbl-header th:first-child{
+    background-color:white;
+    border:1px solid white;
+    border-right: 1px solid rgb(25, 18, 112) !important;
+}
+
+.asset-table #assettr:nth-child(odd){
+    background-color:white;
+}
+
+.asset-table #assettr:nth-child(even){
+    background-color:rgb(152, 202, 255);
+}
+
+.asset-table #assettr td:first-child {
+    background-color: white;
+    border:1px solid white;
+    border-right: 1px solid black !important;
+    text-align: left;
+}
+
+/* Asset Inventory Table */
+
+.asset-inv-table-container{
+    background-color:rgb(218, 218, 218);
+    max-height:537px;
+    width:400px;
+    overflow-y:auto;
+    margin-top:30px !important;
+    margin:auto;
+}
+
+.asset-inv-table{
+    width:100%;
+    border:1px solid black;
+}
+
+.asset-inv-table td{
+    border:1px solid black;
+    border-left: 1px solid black;
+    padding:5px;
+    font-size:12px;
+}
+
+.asset-inv-table th{
+    border:1px solid rgb(25, 18, 112);
+    position:sticky;
+    top:0;
+    height:50px;
+    padding:7px;
+}
+
+.asset-inv-table tr.tbl-header{
+    background-color:rgb(40, 31, 172);
+    position:sticky;
+    top:0;
+    color:white;
+}
+
+.asset-inv-table #asset-invtr:nth-child(odd){
+    background-color:white;
+}
+
+.asset-inv-table #asset-invtr:nth-child(even){
+    background-color:rgb(152, 202, 255);
+}
+
+/* Assign Employee Table */
+
+.assign-emp-table{
+    width:100%;
+    height:300px !important;
+    overflow-y:auto;
+}
+
+.assign-emp-table td{
+    border:1px solid black;
+    padding:8px;
+    font-size:12px;
+}
+
+.assign-emp-table th{
+    border:1px solid rgb(25, 18, 112);
+    position:sticky;
+    top:0;
+    padding:8px;
+    font-size:15px;
+}
+
+.assign-emp-table tr.tbl-header{
+    background-color:rgb(40, 31, 172);
+    position:sticky;
+    top:0;
+    color:white;
+}
+
+.assign-emp-table tr.tbl-header th:first-child{
+    background-color:white;
+    border:2px solid white;
+    border-right: 1px solid rgb(25, 18, 112) !important;
+}
+
+
+.assign-emp-table #assign-employeetr:nth-child(odd){
+    background-color:white;
+}
+
+.assign-emp-table #assign-employeetr:nth-child(even){
+    background-color:rgb(152, 202, 255);
+}
+
+.assign-emp-table #assign-employeetr td:first-child {
+    background-color: white;
+    border:2px solid white;
+    border-right: 1px solid black !important;
+    text-align: left;
+}
+
+/* Employee Profile PHP */
+
+.profile-container{
+    width:100%;
+    text-align: left;
+    align-items: center;
+    padding:20px;
+    display:flex;
+}
+
+#profile_pic{
+    font-size:100px;
+    color:black;
+}
+
+#pp-col{
+    margin-left:50px;
+    margin-right:150px;
+}
+
+.asset-container{
+    width:100%;
+    padding:20px;
+}
+
+.asset-list-container h1{
+    text-align: left;
+    font-size:45px;
+    color:rgb(40, 31, 172);
+}
+
+/* Diposed PHP */
+
+.dis-search-bar{
+    width:300px;
+}
+
+.disposed-table-container{
+    background-color:rgb(218, 218, 218);
+    max-height:537px;
+    width:1300px;
+    overflow-y:auto;
+    margin-top:30px !important;
+    margin:auto;
+}
+
+.dis-table{
+    width:100%;
+}
+
+.dis-table td{
+    border:1px solid black;
+    padding:8px;
+    font-size:13px;
+}
+
+.dis-table th{
+    border:1px solid rgb(25, 18, 112);
+    position:sticky;
+    top:0;
+    padding:5px;
+    font-size:14px;
+}
+
+.dis-table tr.tbl-header{
+    background-color:rgb(40, 31, 172);
+    position:sticky;
+    top:0;
+    color:white;
+}
+
+.dis-table tr.tbl-header th:first-child{
+    background-color:white;
+    border:1px solid white;
+    border-right: 1px solid rgb(25, 18, 112) !important;
+}
+
+.dis-table #disposedtr td:first-child {
+    background-color: white;
+    border:1px solid white;
+    border-right: 1px solid black !important;
+    text-align: left;
+}
+.dis-table #disposedtr:nth-child(odd){
+    background-color:white;
+}
+
+.dis-table #disposedtr:nth-child(even){
+    background-color:rgb(152, 202, 255);
+}
+
+.dis-table #disposedtr td:first-child {
+    background-color: white;
+    border:2px solid white;
+    border-right: 1px solid black !important;
+    text-align: left;
+}

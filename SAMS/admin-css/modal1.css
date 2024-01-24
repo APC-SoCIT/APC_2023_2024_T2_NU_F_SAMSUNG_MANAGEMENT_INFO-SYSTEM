@@ -1,0 +1,62 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	--poppins: 'Poppins', sans-serif;
+	--lato: 'Lato', sans-serif;
+
+	--light: #F9F9F9;
+	--blue: #14299f;
+	--light-blue: #14299f78;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #342E37;
+	--red: #DB504A;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+	--icon:#ffffff;;
+}
+
+
+.form-control{
+    height: 40px;
+    font-size: 15px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    background-color: white;
+    border: none;
+    border-radius: 50px;
+
+}
+
+/* to remove the black outline on focus for form fields */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+}
+
+/* Button Design with class button*/
+.button{
+    background: var(--blue);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.button:hover{
+    background: #5757d1;
+}
+
+.head-title form p{
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.alert{
+    font-size: 14px;
+}
