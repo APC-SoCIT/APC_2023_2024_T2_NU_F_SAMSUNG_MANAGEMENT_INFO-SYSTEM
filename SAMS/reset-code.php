@@ -12,16 +12,22 @@ if($email == false){
     <title>Code Verification</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">   
+   
+     <!-- CSS -->
+	<link rel="stylesheet" href="login-css/style.css?<?php echo time();?>">
+    
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 form">
+<div class="container">
+            <div class="login-image">
+                <img src="logo/login-logo.png">
+            </div>
+            <div class="form login-form">
                 <form action="reset-code.php" method="POST" autocomplete="off">
+                    
                     <!--Arrow back-->
-                    <a href="forgot-password.php" style="background: none;" >
-                        <i class="fas fa-arrow-left" style="color: #14299f;"></i>
+                    <a class="arrow-back" href="forgot-password.php">
+                        <i class="fas fa-arrow-left"></i>
                     </a>
 
                     <img src="logo/logo1.png" alt="Logo" class="logo" >

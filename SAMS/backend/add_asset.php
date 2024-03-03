@@ -19,29 +19,35 @@
 
             // Auto Assign new Assets to MIS Storage
 
-        $sys_id = 5;
+        $sys_id = 1;
         $stat = 'New';
 
         $q_insertAssignMIS = $conn->prepare("INSERT INTO assigned_assets_tbl (Asset_ID, System_ID, Stat, Issued_Date)
         VALUES (?, ?, ?, ?)");
 
+        // Logs
+        $q_insertAssignMISLogs = $conn->prepare("INSERT INTO logs_tbl (Asset_ID, System_ID, Stat, Issued_Date)
+        VALUES (?, ?, ?, ?)");
+
         $q_insertAssignMIS->bind_param("ssss", $last_id, $sys_id, $stat, $issue_date);
+        $q_insertAssignMISLogs->bind_param("ssss", $last_id, $sys_id, $stat, $issue_date);
 
         // Insert to Asset Logs Soon...
         
         if($q_insertAssignMIS->execute()){
 
+            $q_insertAssignMISLogs->execute();
             $successmsg = "Asset inserted successfully.";
-            header("Location: ../asset.php?msg=$successmsg");
+            header("Location: ../asset-assign.php?msg=$successmsg");
 
         }else{
             $error_msg = mysqli_error($conn);
-            header("Location: ../asset.php?error_msg=$error_msg");
+            header("Location: ../asset-assign.php?error-msg=$error_msg");
         }
             
     } else {
         $error_msg = mysqli_error($conn);
-        header("Location: ../asset.php?error_msg=$error_msg");
+        header("Location: ../asset-assign.php?error-msg=$error_msg");
     }
 
     mysqli_close($conn);

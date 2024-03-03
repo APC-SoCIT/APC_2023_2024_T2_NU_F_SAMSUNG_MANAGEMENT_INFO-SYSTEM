@@ -6,15 +6,8 @@
 	box-sizing: border-box;
 }
 
-a {
-	text-decoration: none;
-}
-
-li {
-	list-style: none;
-}
-
 :root {
+	/* FONTS */
 	--poppins: 'Poppins', sans-serif;
 	--lato: 'Lato', sans-serif;
 
@@ -29,7 +22,74 @@ li {
 	--light-yellow: #FFF2C6;
 	--orange: #FD7238;
 	--light-orange: #FFE0D3;
-	--icon:#ffffff;;
+	--icon:#ffffff;
+
+	/* ---------- COLORS ---------- */
+	/* LEFTSIDE COLOR */
+	--leftside :#151515;
+	--active :#151515;
+	--sidebartxt: #151515;
+	
+	/* TOPSIDE COLOR */
+	--topsideboard:#ffffff;
+	--topside :#151515;
+	--topsearchicon :#e5ff00;
+	--topsearch:#151515;
+	
+	/* CONTENT CENTER COLOR */
+	--dashcontent :#ffffff;
+	--dashcontent2:#151515;
+	--dashcontent3 :#ffffff;
+	--dashcontent4 :#ffffff;
+	--dashtext:#151515;
+
+	/* THEME COLOR */
+	--theme :#151515;
+	--theme1 :#ffffff;
+	--theme-sidebartxt: #151515;
+	--theme-sidebartxt1: #14299f;
+	--theme-sidebartxt2: #fc6db5;
+	--theme-icon:#151515;
+	--theme-icon1:#14299f;
+	--theme-icon2:#fc6db5;
+
+	/* DROP DOWN COLOR */
+	--dropdown :#ffffff;
+	--dropdown1 :#151515;
+
+	/* SHADOW DOR DROPDOWN BOX */
+	--shadbox : #201f1f2b;
+	
+	/* CONSOLE */
+	--red: #DB504A;
+	--dark-blue: #131323;
+
+	/* ---------------------------- */
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+	color:var(--dashtext);
+}
+
+h3{
+	color:var(--dashtext);
+}
+
+h2{
+	color:var(--dashtext);
+}
+
+p{
+	color:var(--dashtext);
+}
+
+label{
+	color:var(--dashtext);
 }
 
 html {
@@ -38,9 +98,43 @@ html {
 
 /*FOR DARK MORDE*/
 body.dark {
-	--light: #0C0C1E;
-	--grey: #060714;
+
+	--light: #1e1e2e;
 	--dark: #FBFBFB;
+
+	/* THEME COLOR */
+	--theme :#151515;
+	--theme1 :#ffffff;
+	--theme-sidebartxt: #ffffff;
+	--theme-sidebartxt1: #ffffff;
+	--theme-sidebartxt1: #ffffff;
+	--theme-icon:#ffffff;
+	--theme-icon1:#14299f;
+	--theme-icon2:#fc6db5;
+
+	/* TOPSIDE DARKMODE COLOR */
+	--topsideboard:#1e1e2e;
+	--topside :#ffffff;
+	/* --topsearchicon :#a74e6b; */
+
+	/* CONTENT CENTER COLOR */
+	--dashcontent :#ffffff;
+	--dashcontent2: #ffffff;
+	--dashcontent3 :#0f0f10;
+	--dashcontent4 :#ffffff;
+	--dashtext:#151515;
+
+	/* CONTENT CENTER TITLE */
+	--dashtext:#ffffff;
+
+	/* LEFTSIDE ACITIVE COLOR */
+	--active :#ffffffba;
+	--grey: #12141a;
+	--shadbox :rgba(0, 0, 0, 0.101);
+
+	/* DROPDOWN COLOR */
+	--dropdown:#1e1e2e;
+
 }
 
 body {
@@ -48,18 +142,37 @@ body {
 	overflow-x: hidden;
 }
 
+/* ********************* SCROLL BAR ********************* */
 
+/* Style the scrollbar */
+::-webkit-scrollbar {
+	width:  10px; /* Width of the scrollbar */
+}
 
+/* Style the scrollbar track */
+::-webkit-scrollbar-track {
+	background: var(--grey); /* Color of the track */
+}
 
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+	background: var(--leftside); /* Color of the thumb */
+	border-radius:5px;
+}
 
-/* SIDEBAR */
+::-webkit-scrollbar-thumb:hover {
+	filter:brightness(180%) !important;
+}
+
+/* ********************* LEFT SIDE ********************** */
+/* sidebar category box and position */
 #sidebar {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 280px;
 	height: 100%;
-	background: var(--blue);
+	background:var(--leftside);
 	z-index: 2000;
 	font-family: var(--lato);
 	transition: .3s ease;
@@ -73,7 +186,7 @@ body {
 	width: 60px;
 }
 
-/*-Logo and Brand Name*/
+/* Logo and Brand Name */
 #sidebar .brand {
 	display: flex;
 	align-items: center;
@@ -110,10 +223,11 @@ body {
 
 /*text,icon color when clicking*/
 #sidebar .side-menu.top li.active a {
-	color: var(--blue);
+	color: var(--sidebartxt);
 }
+/* hover */
 #sidebar .side-menu.top li.active a:hover {
-	color: var(--dark);
+	color: var(--active);
 }
 
 #sidebar .side-menu li a {
@@ -123,7 +237,7 @@ body {
 	align-items: center;
 	border-radius: 48px;
 	font-size: 16px;
-	color: var(--icon);
+	color: white;
 	white-space: nowrap;
 	overflow-x: hidden;
 }
@@ -173,7 +287,7 @@ body {
 
 /*logout*/
 #sidebar .side-menu li a.logout {
-	color: var(--icon);
+	color: white;
 }
 
 /*logout*/
@@ -199,12 +313,10 @@ body {
 }
 
 
-
-
 /* TOPSIDE */
 #content nav {
 	height: 56px;
-	background: var(--light);
+	background: var(--topsideboard);
 	padding: 0 24px;
 	display: flex;
 	align-items: center;
@@ -223,18 +335,18 @@ body {
 	bottom: -40px;
 	left: 0;
 	border-radius: 50%;
-	box-shadow: -20px -20px 0 var(--light);
+	box-shadow: -20px -20px 0 var(--topsideboard);
 }
 
 /*message icon*/
 #content nav a {
-	color: var(--dark);
+	color: var(--topside);
 }
 
 /*hamburger menu*/
 #content nav .bx.bx-menu {
 	cursor: pointer;
-	color: var(--dark);
+	color: var(--topsearch);
 }
 
 
@@ -245,11 +357,27 @@ body {
 	margin-right: auto;
 }
 
-/*search*/
+
+/* -------------------- */
+
+
+/* HAMBURGER MENU */
+#content nav .bx.bx-menu {
+	cursor: pointer;
+	color: var(--dark);
+}
+/* -------------------- */
+
+
+/* SEARCH */
 #content nav form .form-input {
 	display: flex;
 	align-items: center;
 	height: 36px;
+}
+
+.form-input ::placeholder {
+    color: var(--topside);
 }
 
 #content nav form .form-input input {
@@ -261,7 +389,7 @@ body {
 	border-radius: 36px 0 0 36px;
 	outline: none;
 	width: 100%;
-	color: var(--dark);
+	color: var(--topside);
 }
 #content nav form .form-input button {
 	width: 36px;
@@ -269,55 +397,23 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: var(--blue);
-	color: var(--light);
+	background: var(--topsearch);
+	color: var(--topsideboard);
 	font-size: 18px;
 	border: none;
 	outline: none;
 	border-radius: 0 36px 36px 0;
 	cursor: pointer;
+	transition: all .3 ease;
 }
 /****************************************/
 
-/*category text*/
+/*DASHBOARD TEXT*/
 #content nav .nav-link {
 	font-size: 16px;
-	transition: .3s ease;
-}
-#content nav .nav-link:hover {
-	color: var(--blue);
+	color: var(--topside);
 }
 
-#content nav .notification {
-	font-size: 20px;
-	position: relative;
-}
-#content nav .notification .num {
-	position: absolute;
-	top: -6px;
-	right: -6px;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	border: 2px solid var(--light);
-	background: var(--red);
-	color: var(--light);
-	font-weight: 700;
-	font-size: 12px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-/*********************************/
-
-/*profile*/
-#content nav .profile img {
-	width: 36px;
-	height: 36px;
-	object-fit: cover;
-	border-radius: 50%;
-}
-/********************/
 
 /*dark mode*/
 #content nav .switch-mode {
@@ -336,14 +432,92 @@ body {
 	left: 2px;
 	bottom: 2px;
 	width: calc(25px - 4px);
-	background: var(--blue);
+	background: var(--topsearch);
 	border-radius: 50%;
 	transition: all .3s ease;
 }
 #content nav #switch-mode:checked + .switch-mode::before {
 	left: calc(100% - (25px - 4px) - 2px);
 }
-/**************************/
+/* -------------------- */
+
+/* name */
+.name{
+	color: var(--topside);
+}
+
+
+
+/* Dropdown button */
+/* Style for the dropdown container */
+.dropdown {
+	position: relative;
+	display: inline-block;
+	padding: 10px;
+  }
+  
+/* Style for the dropdown icon */
+.dropdown-icon {
+	font-size: 24px; /* Adjust the font size as needed */
+	cursor: pointer;
+	color: var(--topside);
+	transform:rotate(-90deg);
+	transition-duration: 0.3s;
+}
+
+.dropdown-icon.rotated {
+	transform:rotate(0);
+}
+
+  /* Style for the dropdown content */
+  .dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: var(--dropdown);
+	min-width: 150px;
+	padding: 10px;
+	box-shadow: 0 5px 4px var(--shadbox);
+	z-index: 1;
+	text-align: center;
+	border-radius: 5px;
+	font-weight: bold;
+	right: 0;
+	margin-top: 20px;
+  }
+
+  /* Style for the dropdown content links */
+  .dropdown-content a {
+	color: var(--topside);
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+  }
+
+  .dropdown-content a:hover{
+	background-color: #00000030;
+	color: var(--dropdown);
+	text-align: center;
+  }
+/* -------------------- */
+/* **************************************************** */
+
+
+/* ***************** CENTER CONTENT ******************* */
+/* POSITION TO CENTER */
+#content {
+	position: relative;
+	width: calc(100% - 280px);
+	left: 280px;
+	transition: .3s ease;
+}
+#sidebar.hide ~ #content {
+	width: calc(100% - 60px);
+	left: 60px;
+}
+/* -------------------- */
+
+
+/* CARDS POSITION */
 /*************************************************************************************************/
 
 
@@ -359,7 +533,7 @@ body {
 	overflow-y: auto;
 }
 
-/*ashboard text*/
+/*CARDS TEXT*/
 #content main .head-title {
 	display: flex;
 	align-items: center;
@@ -371,12 +545,12 @@ body {
 	font-size: 36px;
 	font-weight: 600;
 	margin-bottom: 10px;
-	color: var(--dark);
+	color: var(--dashtext);
 }
 /*************************************/
 
 
-/*box*/
+/*CARDS BOXES*/
 #content main .box-info {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -386,6 +560,7 @@ body {
 #content main .box-info li {
 	padding: 24px;
 	background: var(--light);
+	color:var(--dark);
 	border-radius: 20px;
 	display: flex;
 	align-items: center;
@@ -401,30 +576,31 @@ body {
 	align-items: center;
 }
 
-/*box icon color*/
+/*CARDS ICON COLOR*/
 #content main .box-info li:nth-child(1) .bx {
-	background: var(--light-blue);
-	color: var(--dark);
+	background: var(--grey);
+	color: var(--dashcontent2);
+	transition: all .3 ease;
 }
 #content main .box-info li:nth-child(2) .bx {
-	background: var(--light-blue);
-	color: var(--dark);
+	background: var(--dashcontent);
+	color: var(--dashcontent2);
 }
 #content main .box-info li:nth-child(3) .bx {
-	background: var(--light-blue);
-	color: var(--dark);
+	background: var(--dashcontent);
+	color: var(--dashcontent2);
 }
 #content main .box-info li:nth-child(4) .bx {
-	background: var(--light-blue);
-	color: var(--dark);
+	background: var(--dashcontent);
+	color: var(--dashcontent2);
 }
 #content main .box-info li:nth-child(5) .bx {
-	background: var(--light-blue);
-	color: var(--dark);
+	background: var(--dashcontent);
+	color: var(--dashcontent2);
 }
 #content main .box-info li:nth-child(6) .bx {
-	background: var(--light-blue);
-	color: var(--dark);
+	background: var(--dashcontent);
+	color: var(--dashcontent2);
 }
 #content main .box-info li .text h3 {
 	font-size: 24px;
@@ -435,9 +611,78 @@ body {
 	color: var(--dark);	
 }
 /*************************************************/
+/* Theme Switcher CSS */
+
+.theme-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+    cursor: pointer;
+    align-items: center;
+    padding: 10px;
+    border-radius: 50px;
+    background-color: var(--theme);
+    color: var(--theme1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.theme-switcher .text {
+	padding-left: 5px;
+    color: var(--theme1) !important;
+}
+
+.theme-switcher i {
+	margin-bottom: 5px;
+}
+
+/* THEME OPTION */
+.theme-options {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: none;
+	position: absolute;
+	bottom: 50px;
+	right: 25px;
+}
+
+.theme-options.active {
+	display: flex;
+	flex-direction: column; 
+}
+
+.theme-options li {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+/* THEME COLOR ACTIVATE*/
+
+/* Default Theme Black */
+.theme-options li[data-theme="option1"] {
+	background-color: #151515;	
+	border:3px solid white;
+}
+
+/* Navy Blue Theme */
+.theme-options li[data-theme="option2"] {
+	background-color:#14299f;
+	border:3px solid white;
+}
+
+/* Sakura Theme */
+.theme-options li[data-theme="option3"] {
+	background-color:#fc6db5;
+	border:3px solid white;
+}
 
 
-
+/* add another option/color here if there is anything you want to add */
+/* -------------------- */
+/* **************************************************** */
 
 @media screen and (max-width: 768px) {
 	#sidebar {
@@ -452,9 +697,21 @@ body {
 	#content nav .nav-link {
 		display: none;
 	}
+
+		/* color theme */
+		.theme-switcher .text {
+			display: none;
+		}
+		.theme-switcher {
+			border-radius: 10px;
+		}
+		 .theme-switcher i {
+			margin: auto;
+		}
+		.theme-options{
+			right: 0;
+		}
 }
-
-
 
 @media screen and (max-width: 576px) {
 	#content nav form .form-input input {
@@ -466,7 +723,7 @@ body {
 		height: auto;
 		background: transparent;
 		border-radius: none;
-		color: var(--dark);
+		color: var(--theme);
 	}
 
 	#content nav form.show .form-input input {
@@ -493,7 +750,18 @@ body {
 	#content main .table-data .head {
 		min-width: 420px;
 	}
-	#content main .table-data .order table {
+	#content main .table-data .tabl table {
 		min-width: 420px;
+	}
+
+	/* color theme */
+	.theme-switcher .text {
+        display: none;
+    }
+	.theme-switcher {
+		border-radius: 10px;
+	}
+	 .theme-switcher i {
+        margin: auto;
 	}
 }

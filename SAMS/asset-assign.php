@@ -5,27 +5,52 @@ $con = OpenCon(); // Open the database connection
 
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
+
+// Session Time out Code
+$session_login = $_SESSION['keepLoggedIn'];
+
+// Check if there is a timeout session already running
+if(!isset($_SESSION['timeout'])){
+	$_SESSION['timeout'] = time(); // Update last activity time
+}
+
+// Set timeout session 30 minutes if user did not check Keep me Logged In
+if($session_login != "T"){
+	if (isset($_SESSION['timeout']) && (time() - $_SESSION['timeout'] > 900)) {
+		// If the last activity was more than 30 minutes ago, destroy the session
+		session_destroy();
+		session_unset();
+
+		$expired = 'Session Timed out!';
+		header('Location: login-user.php?msg=Session Expired!');
+	}
+}
+
 $fetch_info = null; // Initialize $fetch_info outside the if block
 
 if ($email != false && $password != false) {
-    $sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
-    $run_Sql = mysqli_query($con, $sql);
-    if ($run_Sql) {
-        $fetch_info = mysqli_fetch_assoc($run_Sql);
-        $status = $fetch_info['Stat'];
-        $code = $fetch_info['Code'];
-        if ($status == "verified") {
-            if ($code != 0) {
-                header('Location: reset-code.php');
-            }
-        } else {
-            header('Location: user-otp.php');
-        }
-    }
+	$sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
+	$run_Sql = mysqli_query($con, $sql);
+	if ($run_Sql) {
+		$fetch_info = mysqli_fetch_assoc($run_Sql);
+		$status = $fetch_info['Stat'];
+		$code = $fetch_info['Code'];
+		$role = $fetch_info['Roles'];
+		if ($status == "verified") {
+			if ($code != 0) {
+				header('Location: reset-code.php');
+			}else if($role === 'User'){
+				$error = 'No Access!';
+				header('Location: login-user.php?msg='.$error);
+			}
+		} else {
+			header('Location: user-otp.php');
+		}
+	}
 } else {
-    header('Location: login-user.php');
+	header('Location: login-user.php?msg=Session Expired!');
 }
-CloseCon($con); // Close the database connection
+
 ?>
 
 <!DOCTYPE html>
@@ -39,10 +64,11 @@ CloseCon($con); // Close the database connection
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	
 	<!-- CSS -->
-	<link rel="stylesheet" href="admin-css/department.css">
-	<link rel="stylesheet" href="admin-css/modal.css">
-	<link rel="stylesheet" href="admin-css/modal1.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="admin-css/department.css" async>
+	<link rel="stylesheet" href="admin-css/dashboard.css" async>
+	<link rel="stylesheet" href="admin-css/modal.css" async>
+	<link rel="stylesheet" href="admin-css/modal1.css" async>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" async>
 
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.3.min.js" 
@@ -52,9 +78,10 @@ CloseCon($con); // Close the database connection
 	<!-- JavaScripts haha get it -->
 	<script src="scripts/asset.js"></script>
 	<script src="scripts/modal.js"></script>
+	<script src="scripts/dropdown.js"></script>
 
 	<!-- Flat Pickr -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" async>
   	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 	<title>SAMS</title>
@@ -80,6 +107,12 @@ CloseCon($con); // Close the database connection
 					<span class="text">Department</span>
 				</a>
 			</li>
+            <li>
+                <a href="costcenter.php">
+                    <i class='bx bxs-building'></i>
+                    <span class="text">Cost Center</span>
+                </a>
+            </li>
 			<li>
 				<a href="employee.php">
 					<i class='bx bxs-user' ></i>
@@ -92,7 +125,7 @@ CloseCon($con); // Close the database connection
 					<span class="text">Asset</span>
 				</a>
 			</li>
-			<li  class="active">
+			<li class="active">
 				<a href="#">
 					<i class='bx bxs-check-shield' ></i>
 					<span class="text">Asset Assignment</span>
@@ -139,7 +172,7 @@ CloseCon($con); // Close the database connection
 			<i class='bx bx-menu' ></i>
 
 			<!--Text for category-->
-			<a href="#" class="nav-link">Categories</a>
+			<a href="#" class="nav-link">Admin</a>
 			
 			<!--Search-->
 			<form action="#">
@@ -149,26 +182,46 @@ CloseCon($con); // Close the database connection
 				</div>
 			</form>
 
-			<!--Messages-->
-			<a href="#" class="notification">
-				<i class='bx bxs-message' ></i>
-				<span class="num">8</span>
-			</a>
-
 			<!--Dark Mode-->			
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
 
 			<!--Fetching Name-->
 			<a href="#">
-				<span class="text">Hey,  <?php echo $fetch_info['Fname'] ?></span>
+				<span class="name">Hey,  <?php echo $fetch_info['Fname'] ?></span>
 			</a>
 
+			<!-- Dropdown -->
+			<div class="dropdown">
+				<i class='bx bx-chevron-down dropdown-icon' onclick="toggleDropdown()"></i>
+				<div class="dropdown-content" id="dropdownContent">
+					<!-- Your dropdown content goes here -->
+					<?php
+					$sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
+					$run_Sql = mysqli_query($con, $sql);
+					if ($run_Sql) {
+						$fetch_info = mysqli_fetch_assoc($run_Sql);
+						$role = $fetch_info['Roles'];
+						if($role == "Admin"){
+							?>
+							<a href="user.php" class="dash">User Dashboard</a><?php
+						}
+					}
+					?>
+					<a href="settings.php" class="set">Settings</a>
+				</div>
+			</div>
 
-			<!--Profile image ixample-->
-			<a href="#" class="profile">
-				<img src="logo/profile.avif">
-			</a>
+			<!-- Theme Switcher -->
+			<div class="theme-switcher" id="themeSwitcher">
+				<i class="bx bx-paint"></i>
+				<span class="text">Theme</span>
+				<ul class="theme-options">
+					<li data-theme="option1"></li>
+					<li data-theme="option2"></li>
+				<!-- add another option/color here if there is anything you want to add  -->
+				</ul>
+			</div>
 
 		</nav>
 		<!-- ------------------------------------------------- -->
@@ -206,7 +259,6 @@ CloseCon($con); // Close the database connection
 				
 			</div>
 
-			<button id="openModalBtn add-submit">+ Add Asset</button>
 			<button id="openModalBtn assign-submit"><i class="bi bi-person-plus"></i> Assign Assets</button>
 			<button id="openModalBtn edit-row"><i class="bi bi-pencil-square"></i> Edit Assets</button>
 			<button id="openModalBtn dispose-submit"><i class="bi bi-trash"></i> Dispose Assets</button>
@@ -216,8 +268,28 @@ CloseCon($con); // Close the database connection
 					<!-- Header before table -->
 					<div class="head">
 						<h3>Asset Assignment</h3>
+						<form action="backend/report_asset.php" method="post" class="report_form">
+							<input type="submit" name="asset_report" class="btnclear" value="Generate Report">
+							<input type="hidden" name="searchbar" id="searchbar_cont">
+							<input type="hidden" name="sort" id="sort">
+							<input type="hidden" name="flag" id="flag">
+							<input type="hidden" name="filter" id="filter">
+							<input type="hidden" name="filter_cat" id="filter_cat">
+						</form>
 						<button class="btnclear" id="clear-search">Clear</button>
-						<i class='bx bx-filter'></i>
+						<div class="filter">
+							<span>Filter by: </span>
+							<select name="filter-cat" id="filter-cat">
+								<option value="" selected="">None</option>
+								<option value="it_assets_tbl.Category">Category</option>
+								<option value="it_assets_tbl.Descr">Description</option>
+								<option value="assigned_assets_tbl.Stat">Status</option>
+								<option value="assigned_assets_tbl.Issued_Date">Issued Date</option>
+							</select>
+							<select name="filter-table" id="filter-table">
+								<option value="" selected="">None</option> 
+							</select>
+						</div>
 					</div>
 					<!-- Loaded Table -->
 					<div id="searchresult">
@@ -226,43 +298,10 @@ CloseCon($con); // Close the database connection
 				</div>
 
 				<!-- Modals -->
-				<div id="myModal" class="modal">
-					<div class="modal-content">
-						<span class="close" id="closeModalBtn">&times;</span>
-						<form action="backend/add_asset.php" class="add-assetform" method="POST">
-							<h3>Add Asset</h3><br>
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Asset Number" id="asset_no" name="asset_no" required><br>
-							</div>
-							<div class="form-group">
-								<select name="category" class="form-control" id="category" required>
-									<option value="" disabled selected>--Category--</option>
-									<option value="Laptop">Laptop</option>
-									<option value="Cellphone">Cellphone</option>
-									<option value="Printer">Printer</option>
-									<option value="Television">Television</option>
-									<option value="Monitor">Monitor</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Description" id="descr" name="descr" required><br>
-							</div>
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Serial Number" id="serial_no" name="serial_no" required>
-							</div>
-							<div class="form-group">
-								<input type="date" class="form-control" placeholder="Date" id="issuedate" name="issued_date" required>
-							</div>
-							<div class="form-group">
-								<input type="submit" class="form-control button" id="add_submit" value="Add" name="add_submit">
-							</div>
-						</form>
-					</div>
-				</div>
 				<div id="myModal2" class="modal">
 					<div class="modal-content">
 						<span class="close" id="closeModalBtn">&times;</span>
-						<form action="backend/assign_asset.php" class="assign-assetform">
+						<form action="backend/assign_asset.php" class="assign-assetform" method="POST">
 							<h3>Assign Asset</h3>
 							<div class="form-group">
 								<ul id="resultList"></ul>
@@ -291,7 +330,7 @@ CloseCon($con); // Close the database connection
 							<input type="hidden" id="assetid" name="asset_id" required>
 							<h3>Asset No.</h3>
 							<div class="form-group">	
-								<input type="text" class="form-control" id="editAsset_no" name="asset_no" placeholder="Asset No." required>
+								<input type="text" class="form-control" pattern="[0-9]+" id="editAsset_no" name="asset_no" placeholder="Asset No." maxlength="30" required>
 							</div>
 							<h3>Category</h3>
 							<div class="form-group">
@@ -306,15 +345,15 @@ CloseCon($con); // Close the database connection
 							</div>
 							<h3>Description</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
+								<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" maxlength="30" required>
 							</div>
 							<h3>Serial No.</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" id="serialno" name="serialno" placeholder="Serial No." required>
+								<input type="text" class="form-control" id="serialno" name="serialno" placeholder="Serial No." maxlength="17" required>
 							</div>
 							<h3>Status</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" id="editStat" name="stat" placeholder="Status" required>
+								<input type="text" class="form-control" id="editStat" name="stat" placeholder="Status" maxlength="15" required>
 							</div>
 							<h3>Issued Date</h3>
 							<div class="form-group">
@@ -338,7 +377,7 @@ CloseCon($con); // Close the database connection
 							<p class="error-txt">Click confirm to dispose of these assets. This action cannot be undone!</p>
 							<h3>Status</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" name="status" id="status_submit" placeholder="Reason for Disposal">
+								<input type="text" class="form-control" name="status" id="status_submit" placeholder="Reason for Disposal" maxlength="30">
 							</div>
 							<div class="form-group">
 								<input type="submit" class="form-control button" id="assign_submit" value="Dispose" name="assign_submit">
@@ -351,7 +390,9 @@ CloseCon($con); // Close the database connection
 	</section>
 	<!-- -------------------------------------------------------------- -->
 
-
 	<script src="scripts/dashboardadmin.js"></script>
+	<script async defer>
+      applyStoredTheme();
+    </script>
 </body>
 </html>

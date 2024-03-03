@@ -10,13 +10,21 @@ if($email == false){
 <head>
     <meta charset="UTF-8">
     <title>Code Verification</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+    
+     <!-- CSS -->
+	<link rel="stylesheet" href="login-css/style.css?<?php echo time();?>">
+    
+
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 form">
+            <div class="login-image">
+                <img src="logo/login-logo.png">
+            </div>
+            <div class="form login-form">
                 <form action="user-otp.php" method="POST" autocomplete="off">
                     <h2 class="text-center">Code Verification</h2>
                     <?php 
@@ -41,11 +49,14 @@ if($email == false){
                         <?php
                     }
                     ?>
-                    <div class="form-group">
+                     <div class="form-group">
+                    <div class="circle">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
                         <input class="form-control" type="number" name="otp" placeholder="Enter verification code" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control button" type="submit" name="check" value="Submit">
+                        <input class="button" type="submit" name="check" value="Submit">
                     </div>
                 </form>
             </div>

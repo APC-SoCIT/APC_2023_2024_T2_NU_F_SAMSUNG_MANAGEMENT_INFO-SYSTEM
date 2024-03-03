@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     editAssetBtn.addEventListener('click', () => {
   
-      const selectedCheckbox = $('input[type=checkbox]:checked');
+      const selectedCheckbox = $('input[type=checkbox]:checked:not(#switch-mode)');
       if (selectedCheckbox.length == 1) {
         editModalBtn.style.display = 'block';
       }else{
@@ -113,13 +113,40 @@ $(document).ready(function () {
     // Event listener for the Edit button
     editButton.click(function (event) {
       event.preventDefault(); // Prevent form submission
-      const selectedCheckbox = $('input[type=checkbox]:checked');
+      const selectedCheckbox = $('input[type=checkbox]:checked:not(#switch-mode)');
       if (selectedCheckbox.length == 1) {
         populateFormFromRow(selectedCheckbox);
         // Trigger the change event on the "Department" dropdown to load Cost Centers
         // $('#dis_edit').change();
       }
     });
-  
+
+      // Event Handler to toggle checkbox when clicking entire row
+
+  document.addEventListener('click', (event) => {
+
+    if (event.target && event.target.tagName === "TD"){
+
+      // Find the tr that contains the clicked td
+      var row = event.target.parentNode;
+      
+      // Find the checkbox within that tr
+      var checkbox = row.querySelector('input[type="checkbox"]:not(#switch-mode)');
+      
+      // Toggle the checkbox state
+      if (checkbox){
+        checkbox.checked = !checkbox.checked;
+        row.style.backgroundColor = checkbox.checked ? 'var(--selectrow)' : '';
+      }
+
+    }
+
+  });
+
+  // Restrict date to today
+
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('issuedate').setAttribute('max', today);
     
 });
+

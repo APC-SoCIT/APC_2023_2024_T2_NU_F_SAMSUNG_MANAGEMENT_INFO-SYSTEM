@@ -10,18 +10,22 @@
 	--poppins: 'Poppins', sans-serif;
 	--lato: 'Lato', sans-serif;
 
-	--light: #F9F9F9;
-	--blue: #14299f;
-	--light-blue: #14299f78;
-	--grey: #eee;
-	--dark-grey: #AAAAAA;
-	--dark: #342E37;
-	--red: #DB504A;
-	--yellow: #FFCE26;
-	--light-yellow: #FFF2C6;
-	--orange: #FD7238;
-	--light-orange: #FFE0D3;
-	--icon:#ffffff;;
+	/* ---------- COLORS ---------- */
+  --modalbtn:#000000;
+  --modalbtn1:#ffffff;
+  --modaldash:#000000;
+
+  --modalclose:#000000;
+
+
+
+  --modalform :#000000;
+  --modalform1:#ffffff;
+
+  --modalformbx :#ffffff;
+  
+  --modalshadow :#000000c9;
+	/* ---------------------------- */
 }
 
 /* modal button */
@@ -30,10 +34,10 @@
     padding: 10px 15px;
     font-size: 15px;
     cursor: pointer;
-    background-color:white;
+    background-color:var(--light);
     border: none;
     border-radius: 10px;
-    color: var(--blue);
+    color: var(--dark);
     font-weight:bold;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -81,8 +85,11 @@
 
   /*modal box content*/
   .modal-content {
-    background-color: #eee;
-    margin: 10% auto;
+    background-color: var(--grey);
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
     padding: 20px;
     border: none;
     border-radius: 10px;
@@ -101,7 +108,7 @@
 
   /*modal x icon*/
   .close {
-    color: var(--blue);
+    color: var(--topside);
     float: right;
     font-size: 28px;
     font-weight: bold;

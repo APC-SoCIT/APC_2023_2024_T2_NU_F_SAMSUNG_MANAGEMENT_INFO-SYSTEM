@@ -12,12 +12,18 @@ if($email == false){
     <title>Create a New Password</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">   
+    
+     <!-- CSS -->
+	<link rel="stylesheet" href="login-css/style.css?<?php echo time();?>">
+    
 </head>
 <body>
+    
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 form">
+            <div class="login-image">
+                <img src="logo/login-logo.png">
+            </div>
+            <div class="form login-form">
                 <form action="new-password.php" method="POST" autocomplete="off">
                     <img src="logo/logo1.png" alt="Logo" class="logo" >
                     <h3 class="text-center">New Credential</h3>

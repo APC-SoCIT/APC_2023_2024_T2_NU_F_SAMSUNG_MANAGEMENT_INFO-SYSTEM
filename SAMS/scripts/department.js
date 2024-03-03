@@ -1,4 +1,90 @@
+//Global Variable for sorting and filtering
+var sort = "";
+// Set if ascending (1) or descending (0)
+var flag = 0;
+
 $(document).ready(function(){
+
+  //Function for filtering
+
+  //Filter Category on change lister for actual filter
+  $("#filter-cat").on('change', () => {
+    var filter_cat = $("#filter-cat").val();
+    var searchbar = $("#dept-sch").val();
+
+
+    //On change of the filter category, ensure that the actual filter is back to none for the selected option
+    const filter_field = document.querySelector("#filter-table");
+    filter_field.selectedIndex =  0;
+
+    $.ajax({
+      url:"backend/department_filter.php",
+      type:"POST",
+      data:{filter_cat:filter_cat},
+      success:function(data){
+        $("#filter-table").html(data);
+      }  
+    });
+
+    if(searchbar != ""){
+      $.ajax({
+        url:"backend/department_rst.php",
+        type:"POST",
+        data:{sort:sort,
+              input:searchbar,
+              flag:flag},
+        success:function(data){
+          $("#searchresult").html(data);
+        }
+      });
+    }else{
+      $.ajax({
+        url:"backend/load_department.php",
+        type:"POST",
+        data:{sort:sort,
+              input:searchbar,
+              flag:flag},
+        success:function(data){
+          $("#searchresult").html(data)
+        }
+      });
+    }
+  });
+
+  //Actual Filter on change listener
+  $("#filter-table").on('change', () => {
+    var searchbar = $("#dept-sch").val();
+    var filter_cat = $("#filter-cat").val();
+    var filter = $("#filter-table").val();
+
+    if(searchbar != ""){
+      $.ajax({
+        url:"backend/department_rst.php",
+        type:"POST",
+        data:{sort:sort,
+              input:searchbar,
+              filter:filter,
+              filter_cat:filter_cat,
+              flag:flag},
+        success:function(data){
+          $("#searchresult").html(data);
+        }
+      });
+    }else{
+      $.ajax({
+        url:"backend/load_department.php",
+        type:"POST",
+        data:{sort:sort,
+              input:searchbar,
+              filter:filter,
+              filter_cat:filter_cat,
+              flag:flag},
+        success:function(data){
+          $("#searchresult").html(data)
+        }
+      });
+    }
+  });
 
   function loadAllDepartment() {
     $.ajax({
@@ -13,19 +99,36 @@ $(document).ready(function(){
   loadAllDepartment();
 
   $("#dept-sch").keyup(function(){
-    
     var input = $(this).val();
-    
+    var filter_cat = $("#filter-cat").val();
+    var filter = $("#filter-table").val();
+
     if(input != ""){
       $.ajax({
 
         url:"backend/department_rst.php",
         method:"POST",
-        data:{input:input},
+        data:{input:input,
+              sort:sort,
+              filter:filter,
+              filter_cat:filter_cat,
+              flag:flag},
 
         success:function(data){
           $("#searchresult").html(data);
           $("#searchresult").css("display", "block");
+        }
+      });
+    }else if(sort != "" || filter != ""){
+      $.ajax({
+        url:"backend/load_deparatment.php",
+        type:"POST",
+        data:{sort:sort,
+              filter:filter,
+              filter_cat:filter_cat,
+              flag:flag},
+        success:function(data){
+          $("#searchresult").html(data)
         }
       });
     }else{
@@ -76,21 +179,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const dept_head2 = document.querySelector('#modal-header2');
   const clearSearch = document.querySelector('#clear-search');
-  const loadtable = document.querySelector('[id*="switch-table"]');
   
-  const selectmodal = document.querySelector('#myModal');
   const selectDeptCenterButton = document.querySelector('[id*="add-submit"]');
+  const importBtn = document.querySelector('[id*="import_asset"]');
 
-  const addDeptmodal = document.querySelector('#myModal2');
-  const selectDept = document.querySelector('#add-department');
-  const selectCcenter = document.querySelector('#add-ccenter');
+  const importModal = document.querySelector('#myModal');
+  const addDeptmodal = document.querySelector('#myModal3');
+  const editDeptmodal = document.querySelector('#myModal4');
+  const deleteDeptmodal = document.querySelector('#myModal5');
 
-  const editDeptmodal = document.querySelector('#myModal3');
-  const deleteDeptmodal = document.querySelector('#myModal4');
-
-  const addCcentermodal = document.querySelector('#myModal5');
   const editCcentermodal = document.querySelector('#myModal6');
   const deleteCcentermodal = document.querySelector('#myModal7');
 
@@ -98,14 +196,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   selectDeptCenterButton.addEventListener('click', () => {
         
-    selectmodal.style.display = "block";
+    addDeptmodal.style.display = "block";
       
   });
 
-  selectDept.addEventListener('click', () => {
-    
-    selectmodal.style.display = "none";
-    addDeptmodal.style.display = "block";
+  importBtn.addEventListener('click', () => {
+
+    if(importModal.style.display === "none"){
+      importModal.style.display = "block";
+    }else{
+      importModal.style.display = "none";
+    }
 
   });
 
@@ -132,13 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ccenter_txtfld.value = "";
 
     });
-
-  });
-
-  selectCcenter.addEventListener('click', () => {
-
-    addCcentermodal.style.display = 'block';
-    selectmodal.style.display = 'none';
 
   });
 
@@ -222,31 +316,156 @@ document.addEventListener('DOMContentLoaded', () => {
   clearSearch.addEventListener('click', () => {
 
     const search_bar = document.querySelector("#dept-sch");
+    const filter_cat_field = document.querySelector("#filter-cat");
+    const filter = document.querySelector("#filter-table");
 
     search_bar.value = "";
+
+    filter_cat_field.selectedIndex =  0;
+    filter.selectedIndex =  0;
+    //reset ascending or descending
+    flag = 0;
+
+    var filter_cat = $("#filter-cat").val();
+
+    $.ajax({
+      url:"backend/department_filter.php",
+      type:"POST",
+      data:{filter_cat:filter_cat},
+      success:function(data){
+        $("#filter-table").html(data);
+      }
+    });
 
     loadAllDepartment();
 
   });
 
-  loadtable.addEventListener('click', () => {
+  // Table Column sort
 
-    var button_txt = loadtable.textContent;
-    if(button_txt === 'Cost Center'){
+  document.addEventListener('click', (event) => {
 
-      loadtable.textContent = 'Department';
-      dept_head2.textContent = 'Cost Center';
-      loadAllCcenter();
+    var searchbar = $("#dept-sch").val();
+    var filter_cat = $("#filter-cat").val();
+    var filter = $("#filter-table").val();
 
-    }else{
+    if (event.target && event.target.id === "id-col"){
 
-      loadtable.textContent = 'Cost Center';
-      dept_head2.textContent = 'Department';
-      loadAllDepartment();
+      if(flag == 0){
+        flag = 1;
+      }else{
+        flag = 0;
+      }
+
+      sort = "department_tbl.Department_ID";
+      if(searchbar != ""){
+        $.ajax({
+          url:"backend/department_rst.php",
+          type:"POST",
+          data:{sort:sort,
+                input:searchbar,
+                filter:filter,
+                filter_cat:filter_cat,
+                flag:flag},
+          success:function(data){
+            $("#searchresult").html(data);
+          }
+        });
+      }else{
+
+        $.ajax({
+          url:"backend/load_department.php",
+          type:"POST",
+          data:{sort:sort,
+                input:searchbar,
+                filter:filter,
+                filter_cat:filter_cat,
+                flag:flag},
+          success:function(data){
+            $("#searchresult").html(data)
+          }
+        });
+      }
+
+    }else if(event.target && event.target.id === "dept-col"){
+
+      if(flag == 0){
+        flag = 1;
+      }else{
+        flag = 0;
+      }
+
+      sort = "department_tbl.Department";
+
+      if(searchbar != ""){
+        $.ajax({
+          url:"backend/department_rst.php",
+          type:"POST",
+          data:{sort:sort,
+                input:searchbar,
+                filter:filter,
+                filter_cat:filter_cat,
+                flag:flag},
+          success:function(data){
+            $("#searchresult").html(data);
+          }
+        });
+      }else{
+
+        $.ajax({
+          url:"backend/load_department.php",
+          type:"POST",
+          data:{sort:sort,
+                input:searchbar,
+                filter:filter,
+                filter_cat:filter_cat,
+                flag:flag},
+          success:function(data){
+            $("#searchresult").html(data)
+          }
+        });
+      }
+
+    }else if(event.target && event.target.id === "ccenter-col"){
+
+      if(flag == 0){
+        flag = 1;
+      }else{
+        flag = 0;
+      }
+
+      sort = "cost_center_tbl.Cost_Center";
+
+      if(searchbar != ""){
+        $.ajax({
+          url:"backend/department_rst.php",
+          type:"POST",
+          data:{sort:sort,
+                input:searchbar,
+                filter:filter,
+                filter_cat:filter_cat,
+                flag:flag},
+          success:function(data){
+            $("#searchresult").html(data);
+          }
+        });
+      }else{
+
+        $.ajax({
+          url:"backend/load_department.php",
+          type:"POST",
+          data:{sort:sort,
+                input:searchbar,
+                filter:filter,
+                filter_cat:filter_cat,
+                flag:flag},
+          success:function(data){
+            $("#searchresult").html(data)
+          }
+        });
+      }
 
     }
-
   });
-
+  
 });
-

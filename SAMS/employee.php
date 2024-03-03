@@ -5,25 +5,49 @@ $con = OpenCon(); // Open the database connection
 
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
+// Session Time out Code
+$session_login = $_SESSION['keepLoggedIn'];
+
+// Check if there is a timeout session already running
+if(!isset($_SESSION['timeout'])){
+	$_SESSION['timeout'] = time(); // Update last activity time
+}
+
+// Set timeout session 30 minutes if user did not check Keep me Logged In
+if($session_login != "T"){
+	if (isset($_SESSION['timeout']) && (time() - $_SESSION['timeout'] > 900)) {
+		// If the last activity was more than 30 minutes ago, destroy the session
+		session_destroy();
+		session_unset();
+
+		$expired = 'Session Timed out!';
+		header('Location: login-user.php?msg=Session Expired!');
+	}
+}
+
 $fetch_info = null; // Initialize $fetch_info outside the if block
 
 if ($email != false && $password != false) {
-    $sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
-    $run_Sql = mysqli_query($con, $sql);
-    if ($run_Sql) {
-        $fetch_info = mysqli_fetch_assoc($run_Sql);
-        $status = $fetch_info['Stat'];
-        $code = $fetch_info['Code'];
-        if ($status == "verified") {
-            if ($code != 0) {
-                header('Location: reset-code.php');
-            }
-        } else {
-            header('Location: user-otp.php');
-        }
-    }
+	$sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
+	$run_Sql = mysqli_query($con, $sql);
+	if ($run_Sql) {
+		$fetch_info = mysqli_fetch_assoc($run_Sql);
+		$status = $fetch_info['Stat'];
+		$code = $fetch_info['Code'];
+		$role = $fetch_info['Roles'];
+		if ($status == "verified") {
+			if ($code != 0) {
+				header('Location: reset-code.php');
+			}else if($role === 'User'){
+				$error = 'No Access!';
+				header('Location: login-user.php?msg='.$error);
+			}
+		} else {
+			header('Location: user-otp.php');
+		}
+	}
 } else {
-    header('Location: login-user.php');
+	header('Location: login-user.php?msg=Session Expired!');
 }
 
 
@@ -65,10 +89,11 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	
 	<!-- CSS -->
-	<link rel="stylesheet" href="admin-css/department.css">
-	<link rel="stylesheet" href="admin-css/modal.css">
-	<link rel="stylesheet" href="admin-css/modal1.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="admin-css/department.css" async>
+	<link rel="stylesheet" href="admin-css/dashboard.css" async>
+	<link rel="stylesheet" href="admin-css/modal.css" async>
+	<link rel="stylesheet" href="admin-css/modal1.css" async>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" async>
 
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.3.min.js" 
@@ -78,9 +103,10 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 	<!-- JavaScripts haha get it -->
 	<script src="scripts/employee.js"></script>
 	<script src="scripts/modal.js"></script>
+	<script src="scripts/dropdown.js"></script>
 
 	<!-- Flat Pickr -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" async>
   	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 	<title>SAMS</title>
@@ -108,6 +134,12 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 					<span class="text">Department</span>
 				</a>
 			</li>
+            <li>
+                <a href="costcenter.php">
+                    <i class='bx bxs-building'></i>
+                    <span class="text">Cost Center</span>
+                </a>
+            </li>
 			<li class="active">
 				<a href="#">
 					<i class='bx bxs-user' ></i>
@@ -165,7 +197,7 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 			<i class='bx bx-menu' ></i>
 
 			<!--Text for category-->
-			<a href="#" class="nav-link">Categories</a>
+			<a href="#" class="nav-link">Admin</a>
 			
 			<!--Search-->
 			<form action="#">
@@ -175,25 +207,46 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 				</div>
 			</form>
 
-			<!--Messages-->
-			<a href="#" class="notification">
-				<i class='bx bxs-message' ></i>
-				<span class="num">8</span>
-			</a>
-
 			<!--Dark Mode-->			
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
 
 			<!--Fetching Name-->
 			<a href="#">
-				<span class="text">Hey,  <?php echo $fetch_info['Fname'] ?></span>
+				<span class="name">Hey,  <?php echo $fetch_info['Fname'] ?></span>
 			</a>
 
-			<!--Profile image ixample-->
-			<a href="#" class="profile">
-				<img src="logo/profile.avif">
-			</a>
+			<!-- Dropdown -->
+			<div class="dropdown">
+				<i class='bx bx-chevron-down dropdown-icon' onclick="toggleDropdown()"></i>
+				<div class="dropdown-content" id="dropdownContent">
+					<!-- Your dropdown content goes here -->
+					<?php
+					$sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
+					$run_Sql = mysqli_query($con, $sql);
+					if ($run_Sql) {
+						$fetch_info = mysqli_fetch_assoc($run_Sql);
+						$role = $fetch_info['Roles'];
+						if($role =="Admin"){
+							?>
+							<a href="user.php" class="dash">User Dashboard</a><?php
+						}
+					}
+					?>
+					<a href="settings.php" class="set">Settings</a>
+				</div>
+			</div>
+
+			<!-- Theme Switcher -->
+			<div class="theme-switcher" id="themeSwitcher">
+				<i class="bx bx-paint"></i>
+				<span class="text">Theme</span>
+				<ul class="theme-options">
+					<li data-theme="option1"></li>
+					<li data-theme="option2"></li>
+				<!-- add another option/color here if there is anything you want to add  -->
+				</ul>
+			</div>
 
 		</nav>
 		<!-- ------------------------------------------------- -->
@@ -229,7 +282,6 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 
 				
 			</div>
-
 			<button id="openModalBtn add-submit">+ Add Employee</button>
 			<button id="openModalBtn edit-employee"><i class="bi bi-pencil-square"></i> Edit Employee</button>
 			<button id="openModalBtn import_employee"><i class="bi bi-box-arrow-in-down"></i> Import Employee</button>
@@ -253,7 +305,21 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 					<div class="head">
 						<h3>Employee</h3>
 						<button class="btnclear" id="clear-search">Clear</button>
-						<i class='bx bx-filter'></i>
+						<div class="filter">
+							<span>Filter by: &nbsp;</span>
+							<select name="filter-cat" id="filter-cat">
+								<option value="" selected="">None</option>
+								<option value="employee_tbl.Employee_ID">Employee ID</option>
+								<option value="employee_tbl.Fname">First Name</option>
+								<option value="employee_tbl.Lname">Last Name</option>
+								<option value="employee_tbl.Knox_ID">Knox ID</option>
+								<option value="department_tbl.Department">Department</option>
+								<option value="cost_center_tbl.Cost_Center">Cost Center</option>
+							</select>
+							<select name="filter-table" id="filter-table">
+								<option value="" selected="">None</option>
+							</select>
+						</div>
 					</div>
 					<!-- Loaded Table -->
 					<div id="searchresult">
@@ -266,19 +332,19 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 						<form action="backend/add_employee.php" method="POST" autocomplete="off">
 							<h3>Add Employee</h3>
 							<div class="form-group">
-								<input type="text" placeholder="Employee ID" class="form-control" id="employee_id" name="employee_id" required="required">
+								<input type="text" placeholder="Employee ID" class="form-control" id="employee_id" name="employee_id" maxlength="15" required="required">
 							</div>
 							<div class="form-group">
-								<input type="text" placeholder="First Name" class="form-control" id="employee_fname" name="employee_fname" required="required">
+								<input type="text" placeholder="First Name" class="form-control" id="employee_fname" name="employee_fname" maxlength="30" required="required">
 							</div>
 							<div class="form-group">
-								<input type="text" placeholder="Last Name" class="form-control" id="employee_lname" name="employee_lname" required="required">
+								<input type="text" placeholder="Last Name" class="form-control" id="employee_lname" name="employee_lname" maxlength="30" required="required">
 							</div>
 							<div class="form-group">
-								<input type="text" placeholder="Knox ID" class="form-control" id="knox_id" name="knox_id" required="required">
+								<input type="text" placeholder="Knox ID" class="form-control" id="knox_id" name="knox_id" maxlength="15" required="required">
 							</div>
 							<div class="form-group">
-								<input type="text" placeholder="Samsung Email" class="form-control" id="email" name="email" required="required">
+								<input type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}" placeholder="Samsung Email" class="form-control" id="email" name="email" maxlength="100" required="required">
 							</div>
 							<h3>Department</h3>
 							<div class="form-group">
@@ -322,19 +388,19 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 							<input type="hidden" id="sys_id" name="sys_id" required>
 							<h3>Employee ID</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" id="editEmployee_ID" name="employee_ID" placeholder="Employee ID" required>
+								<input type="text" class="form-control" id="editEmployee_ID" name="employee_ID" placeholder="Employee ID" maxlength="15" required>
 							</div>
 							<h3>First Name</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required>
+								<input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" maxlength="30" required>
 							</div>
 							<h3>Last Name</h3>
 							<div class="form-group">
-								<input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required>
+								<input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" maxlength="30" required>
 							</div>
 							<h3>Knox ID</h3>
 							<div class="flex-group">
-								<input type="text" class="form-control" id="knox_ID" name="knox_ID" placeholder="Knox ID" required>
+								<input type="text" class="form-control" id="knox_ID" name="knox_ID" placeholder="Knox ID" maxlength="15" required>
 							</div>
 							<h3>Department</h3>
 							<div class="form-group">
@@ -372,12 +438,31 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 					</div>
 				</div>
 			</div>
+
+			<div class="console">
+				<p id="console-header">Console:</p><br>
+				<div>
+				<?php
+					if(isset($_SESSION['errlink'])){
+						$msg = $_SESSION['errlink'];
+
+						echo '<p>'. $msg. '</p>';
+
+						unset($_SESSION['errlink']);
+					}
+				?>
+				</div>
+			</div>
 		</main>
 	</section>
 	<!-- -------------------------------------------------------------- -->
 
 
 	<script src="scripts/dashboardadmin.js"></script>
+
+	<script async defer>
+      applyStoredTheme();
+    </script>
 
 </body>
 </html>

@@ -9,13 +9,14 @@
 
         $q_getDisposed = $conn->prepare("SELECT 
                             disposed_assets_tbl.Disposed_ID as 'Dispose ID',
-                            disposed_assets_tbl.Asset_No as 'Asset No',
-                            disposed_assets_tbl.Category as 'Category',
-                            disposed_assets_tbl.Descr as 'Descr',
-                            disposed_assets_tbl.Serial_No as 'Serial No',
+                            it_assets_tbl.Asset_No as 'Asset No',
+                            it_assets_tbl.Category as 'Category',
+                            it_assets_tbl.Descr as 'Descr',
+                            it_assets_tbl.Serial_No as 'Serial No',
                             disposed_assets_tbl.Stat as 'Status',
                             disposed_assets_tbl.Disposal_Date as 'Disposal Date'
                         FROM disposed_assets_tbl
+                        INNER JOIN it_assets_tbl ON disposed_assets_tbl.Asset_ID = it_assets_tbl.Asset_ID
                         WHERE Disposed_ID LIKE CONCAT('%', ?, '%') OR
                             Asset_No LIKE CONCAT('%', ?, '%') OR
                             Category LIKE CONCAT('%', ?, '%') OR

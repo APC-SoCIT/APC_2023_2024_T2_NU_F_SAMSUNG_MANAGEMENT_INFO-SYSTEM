@@ -53,7 +53,7 @@
                         ?>
                             <tr id="employeetr">
                                 <td>
-                                    <input type="checkbox" id="<?php echo $emp_id ?>" name="sams_employee" value="<?php echo $emp_id ?>">
+                                    <input type="radio" id="<?php echo $emp_id ?>" name="employee_id" value="<?php echo $emp_id ?>">
                                 </td>
                                 <td><?php echo $emp_id;?></td>
                                 <td><?php echo $fname;?></td>

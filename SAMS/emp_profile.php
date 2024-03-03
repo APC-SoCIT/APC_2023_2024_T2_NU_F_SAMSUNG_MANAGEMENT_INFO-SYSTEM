@@ -5,25 +5,50 @@ $con = OpenCon(); // Open the database connection
 
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
+
+// Session Time out Code
+$session_login = $_SESSION['keepLoggedIn'];
+
+// Check if there is a timeout session already running
+if(!isset($_SESSION['timeout'])){
+	$_SESSION['timeout'] = time(); // Update last activity time
+}
+
+// Set timeout session 30 minutes if user did not check Keep me Logged In
+if($session_login != "T"){
+	if (isset($_SESSION['timeout']) && (time() - $_SESSION['timeout'] > 900)) {
+		// If the last activity was more than 30 minutes ago, destroy the session
+		session_destroy();
+		session_unset();
+
+		$expired = 'Session Timed out!';
+		header('Location: login-user.php?msg=Session Expired!');
+	}
+}
+
 $fetch_info = null; // Initialize $fetch_info outside the if block
 
 if ($email != false && $password != false) {
-    $sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
-    $run_Sql = mysqli_query($con, $sql);
-    if ($run_Sql) {
-        $fetch_info = mysqli_fetch_assoc($run_Sql);
-        $status = $fetch_info['Stat'];
-        $code = $fetch_info['Code'];
-        if ($status == "verified") {
-            if ($code != 0) {
-                header('Location: reset-code.php');
-            }
-        } else {
-            header('Location: user-otp.php');
-        }
-    }
+	$sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
+	$run_Sql = mysqli_query($con, $sql);
+	if ($run_Sql) {
+		$fetch_info = mysqli_fetch_assoc($run_Sql);
+		$status = $fetch_info['Stat'];
+		$code = $fetch_info['Code'];
+		$role = $fetch_info['Roles'];
+		if ($status == "verified") {
+			if ($code != 0) {
+				header('Location: reset-code.php');
+			}else if($role === 'User'){
+				$error = 'No Access!';
+				header('Location: login-user.php?msg='.$error);
+			}
+		} else {
+			header('Location: user-otp.php');
+		}
+	}
 } else {
-    header('Location: login-user.php');
+	header('Location: login-user.php?msg=Session Expired!');
 }
 
 if(!empty($_GET['status'])){
@@ -64,19 +89,21 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	
 	<!-- CSS -->
-	<link rel="stylesheet" href="admin-css/department.css">
-	<link rel="stylesheet" href="admin-css/modal.css">
-	<link rel="stylesheet" href="admin-css/modal1.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="admin-css/department.css" async>
+	<link rel="stylesheet" href="admin-css/dashboard.css" async>
+	<link rel="stylesheet" href="admin-css/modal.css" async>
+	<link rel="stylesheet" href="admin-css/modal1.css" async>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" async>
 
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.3.min.js" 
     integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous">
 	</script>
 
-	<!-- JavaScripts haha get it -->
+	<!-- JavaScripts -->
 	<script src="scripts/employee.js"></script>
 	<script src="scripts/modal.js"></script>
+	<script src="scripts/dropdown.js"></script>
 
 	<!-- Flat Pickr -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -166,7 +193,7 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 			<i class='bx bx-menu' ></i>
 
 			<!--Text for category-->
-			<a href="#" class="nav-link">Categories</a>
+			<a href="#" class="nav-link">Admin</a>
 			
 			<!--Search-->
 			<form action="#">
@@ -175,27 +202,46 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
 				</div>
 			</form>
-
-			<!--Messages-->
-			<a href="#" class="notification">
-				<i class='bx bxs-message' ></i>
-				<span class="num">8</span>
-			</a>
-
 			<!--Dark Mode-->			
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
 
 			<!--Fetching Name-->
 			<a href="#">
-				<span class="text">Hey,  <?php echo $fetch_info['Fname'] ?></span>
+				<span class="name">Hey,  <?php echo $fetch_info['Fname'] ?></span>
 			</a>
 
-			<!--Profile image ixample-->
-			<a href="#" class="profile">
-				<img src="logo/profile.avif">
-			</a>
+			<!-- Dropdown -->
+			<div class="dropdown">
+				<i class='bx bx-chevron-down dropdown-icon' onclick="toggleDropdown()"></i>
+				<div class="dropdown-content" id="dropdownContent">
+					<!-- Your dropdown content goes here -->
+					<?php
+					$sql = "SELECT * FROM employee_tbl WHERE Email = '$email'";
+					$run_Sql = mysqli_query($con, $sql);
+					if ($run_Sql) {
+						$fetch_info = mysqli_fetch_assoc($run_Sql);
+						$role = $fetch_info['Roles'];
+						if($role =="Admin"){
+							?>
+							<a href="user.php" class="dash">User Dashboard</a><?php
+						}
+					}
+					?>
+					<a href="settings.php" class="set">Settings</a>
+				</div>
+			</div>
 
+			<!-- Theme Switcher -->
+			<div class="theme-switcher" id="themeSwitcher">
+				<i class="bx bx-paint"></i>
+				<span class="text">Theme</span>
+				<ul class="theme-options">
+					<li data-theme="option1"></li>
+					<li data-theme="option2"></li>
+				<!-- add another option/color here if there is anything you want to add  -->
+				</ul>
+			</div>
 		</nav>
 		<!-- ------------------------------------------------- -->
 
@@ -237,12 +283,12 @@ $result_all_users = mysqli_query($con, $sql_all_users);
             ?>
 
 
- <!--Arrow back-->
- <div class="arrow">
-	<a href="employee.php" >
-		<i class='bx bx-arrow-back'></i>
-	</a>
- </div>
+		<!--Arrow back-->
+		<div class="arrow">
+			<a href="employee.php" >
+				<i class='bx bx-arrow-back'></i>
+			</a>
+		</div>
  
 
 
@@ -277,7 +323,7 @@ $result_all_users = mysqli_query($con, $sql_all_users);
                                      it_assets_tbl.Descr, 
                                      it_assets_tbl.Serial_No, 
                                      assigned_assets_tbl.Issued_Date, 
-                                     assigned_assets_tbl.Stat 
+                                     assigned_assets_tbl.Stat
                               FROM assigned_assets_tbl
                               INNER JOIN it_assets_tbl ON assigned_assets_tbl.Asset_ID = it_assets_tbl.Asset_ID
                               INNER JOIN employee_tbl ON assigned_assets_tbl.System_ID = employee_tbl.System_ID
@@ -312,7 +358,7 @@ $result_all_users = mysqli_query($con, $sql_all_users);
     
                             ?>
     
-                            <tr id="assettr">
+                            <tr id="ownedtr">
                                 <td></td>
                                 <td><?php echo $asset_id ?: 'N/A'; ?></td>
                                 <td><?php echo $asset_no ?: 'N/A'; ?></td>
@@ -345,6 +391,9 @@ $result_all_users = mysqli_query($con, $sql_all_users);
 
 
 	<script src="scripts/dashboardadmin.js"></script>
+	<script async defer>
+		applyStoredTheme();
+	</script>
 
 </body>
 </html>

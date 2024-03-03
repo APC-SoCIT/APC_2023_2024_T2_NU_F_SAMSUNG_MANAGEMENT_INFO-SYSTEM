@@ -3,14 +3,15 @@
     include '../database/sams_db.php';
     $conn = OpenCon();
 
-    $q_get_disposed = $conn->prepare("SELECT Disposed_ID,
-                                             Asset_No,
-                                             Category,
-                                             Descr,
-                                             Serial_No,
-                                             Stat,
-                                             Disposal_Date
-                                      FROM disposed_assets_tbl");
+    $q_get_disposed = $conn->prepare("SELECT disposed_assets_tbl.Disposed_ID,
+                                             it_assets_tbl.Asset_No,
+                                             it_assets_tbl.Category,
+                                             it_assets_tbl.Descr,
+                                             it_assets_tbl.Serial_No,
+                                             disposed_assets_tbl.Stat,
+                                             disposed_assets_tbl.Disposal_Date
+                                      FROM disposed_assets_tbl
+                                      LEFT JOIN it_assets_tbl ON disposed_assets_tbl.Asset_ID = it_assets_tbl.Asset_ID");
 
     if($q_get_disposed->execute()){
         
@@ -20,7 +21,6 @@
         if($num_rows > 0){?>
             <table class="collapsed">
                 <thead class="tbl-header">
-                    <th></th>
                     <th>Disposed ID</th>
                     <th>Asset No</th>
                     <th>Category</th>
@@ -64,10 +64,11 @@
 
         <?php
 
+        }else{
+            echo "<h5 class=\"error-txt\">Asset does not exist!</h5>";
         }
 
     }else{
-
     }
 
 

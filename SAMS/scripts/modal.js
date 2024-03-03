@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     var selectmodal = document.querySelector('#myModal');
-    var addDeptmodal = document.querySelector('#myModal2');
-    var editDeptmodal = document.querySelector('#myModal3');
+    var addDeptmodal = document.querySelector('#myModal3');
     var deleteDeptmodal = document.querySelector('#myModal4');
     var addCcentermodal = document.querySelector('#myModal5');
     var editCcentermodal = document.querySelector('#myModal6');
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             selectmodal.style.display = 'none';
             addDeptmodal.style.display = 'none';
-            editDeptmodal.style.display = 'none';
             deleteDeptmodal.style.display = 'none';
             addCcentermodal.style.display = 'none';
             editCcentermodal.style.display = 'none';

@@ -29,10 +29,10 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 25px;
-    background-color: white;
+    background-color: var(--light);
     border: none;
     border-radius: 50px;
-
+    color:var(--dark);
 }
 
 /* to remove the black outline on focus for form fields */
@@ -42,15 +42,14 @@ input:focus, textarea:focus, select:focus {
 
 /* Button Design with class button*/
 .button{
-    background: var(--blue);
+    background: var(--theme);
     color: #fff;
     font-size: 17px;
     font-weight: 500;
-    transition: all 0.3s ease;
 }
 
 .button:hover{
-    background: #5757d1;
+    filter:brightness(120%);
 }
 
 .head-title form p{

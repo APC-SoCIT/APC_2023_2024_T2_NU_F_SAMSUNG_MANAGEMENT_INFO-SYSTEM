@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ======================= Cards ====================== */
+.userdata {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 30px;
+}
+
+.userdata .card {
+  position: relative;
+  background: var(--light);
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+
+.userdata .card .info1 {
+  color: var(--black1);
+  font-size: 2rem;
+  font-weight: 500;
+  margin-top: 50px;
+}
+
+.userdata .card .iconBx {
+  font-size: 3.5rem;
+  color: var(--topside);
+}
+
+/* ================== User Asset Table List ============== */
+/* user asset table position alignement */
+.details {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  display: grid;
+  grid-gap: 30px;
+}
+
+/* user asset table box white */
+
+/*****************************************************************/
+
+table.collapsed{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+thead.tbl-header {
+	background-color: var(--tablethbx);
+	padding: 10px; /* Adjust the padding as needed */
+	position:sticky;
+	top:55px;
+  }
+
+thead#table-modal{
+	background-color: #14299f;
+	padding: 10px; /* Adjust the padding as needed */
+	position:sticky;
+	top:0;
+}
+  
+th{
+  text-align: center;
+  padding: 10px;
+  color: white; /* Change the text color for better visibility */
+  font-family: var(--poppins);
+}
+
+td{
+  padding:10px;
+  font-family:var(--lato);
+  color:var(--dark);
+}
+
+
+tbody tr:nth-child(even) {
+  background-color: var(--gap);
+}
+
+
+/* ====================== Responsive Design ========================== */
+@media (max-width: 991px) {
+  .userdata {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .details {
+    grid-template-columns: 1fr;
+  }
+  .user-asset {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .userdata {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .user {
+    min-width: 40px;
+  }
+}

@@ -18,23 +18,23 @@
 
             if($q_edit_ccenter->execute()){
 
-                header('Location: ../department.php?msg=Successfully edited Cost Center');
+                header('Location: ../costcenter.php?msg=Successfully edited Cost Center');
 
             }else{
 
-                header('Location: ../department.php?error-msg=Something went wrong!');
+                header('Location: ../costcenter.php?error-msg=Something went wrong!');
 
             }
 
         }else{
 
-            header('Location: ../department.php?error-msg=Error Preparing Statement');
+            header('Location: ../costcenter.php?error-msg=Error Preparing Statement');
 
         }
 
     }else{
         
-        header('Location: ../department.php?error-msg=Error cannot pass empty value');
+        header('Location: ../costcenter.php?error-msg=Error cannot pass empty value');
 
     }
 
